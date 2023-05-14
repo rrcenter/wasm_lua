@@ -1,0 +1,47 @@
+#
+# Copyright (c) 2021-2022 Bytedance Inc.
+#
+
+name: build-ci
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events
+  push: [push]
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      no_dll:
+         # actions run ID
+         description: 'Do not build windows lib as dll'
+         # Default value if no value is explicitly provided
+         default: ''
+         # Input has to be provided for the workflow to run
+         required: false
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+
+  osx:
+    # The type of runner that the job will run on
+    runs-on: macos-12
+    
+    strategy:
+      matrix:
+        arch:
+          - x64
+    
+    env:
+      BUILD_TARGET: osx
+      BUILD_ARCH: ${{ matrix.arch }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: 
+        - actions/checkout@v3
+        - mymindstorm/setup-emsdk@v11
+
+      - name: Verify emsdk
+        run:  emcc -v
