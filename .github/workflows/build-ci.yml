@@ -2,6 +2,10 @@
 # Copyright (c) 2021-2022 Bytedance Inc.
 #
 
+env:
+  EM_VERSION: 3.1.38
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
 name: build-ci
 
 # Controls when the action will run. 
@@ -28,7 +32,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - name: Setup cache
+        id: cache-system-libraries
+        uses: actions/cache@v2
+        with:
+          path: ${{env.EM_CACHE_FOLDER}}
+          key: ${{env.EM_VERSION}}-${{ runner.os }}
       - uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
       - name: Verify emsdk
         run:  emcc -v
