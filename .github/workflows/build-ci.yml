@@ -45,3 +45,6 @@ jobs:
 
       - name: Verify emsdk
         run:  emcc -v
+
+      - name: Build Lua
+        run: make
