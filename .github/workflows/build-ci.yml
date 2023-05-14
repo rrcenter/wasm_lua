@@ -49,7 +49,7 @@ jobs:
       - name: Upload prebuilt files
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.INSTALL_ROOT }}
+          name: my-artifact
           path: |
             main.js
             main.wasm
